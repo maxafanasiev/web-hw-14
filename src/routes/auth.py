@@ -13,6 +13,16 @@ security = HTTPBearer()
 
 @router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def signup(body: UserModel, db: Session = Depends(get_db)):
+    """
+        Sign up a new user.
+
+        :param body: The user data to sign up.
+        :type body: UserModel
+        :param db: The database session.
+        :type db: Session
+        :return: The newly created user and a success message.
+        :rtype: dict
+    """
     exist_user = await repository_users.get_user_by_email(body.email, db)
     if exist_user:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Account already exists")
@@ -23,6 +33,16 @@ async def signup(body: UserModel, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=TokenModel)
 async def login(body: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    """
+        Log in a user and generate an access token and a refresh token.
+
+        :param body: The login credentials.
+        :type body: OAuth2PasswordRequestForm
+        :param db: The database session.
+        :type db: Session
+        :return: The access token and refresh token.
+        :rtype: dict
+    """
     user = await repository_users.get_user_by_email(body.username, db)
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid email")
@@ -36,6 +56,16 @@ async def login(body: OAuth2PasswordRequestForm = Depends(), db: Session = Depen
 
 @router.get('/refresh_token', response_model=TokenModel)
 async def refresh_token(credentials: HTTPAuthorizationCredentials = Security(security), db: Session = Depends(get_db)):
+    """
+        Refresh an access token using a refresh token.
+
+        :param credentials: The authorization credentials.
+        :type credentials: HTTPAuthorizationCredentials
+        :param db: The database session.
+        :type db: Session
+        :return: The new access token and refresh token.
+        :rtype: dict
+    """
     token = credentials.credentials
     email = await auth_service.decode_refresh_token(token)
     user = await repository_users.get_user_by_email(email, db)

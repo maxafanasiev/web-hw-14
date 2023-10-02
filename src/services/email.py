@@ -23,6 +23,16 @@ conf = ConnectionConfig(
 
 
 async def send_confirm_email(email: EmailStr, username: str, host: str):
+    """
+        Send a confirmation email for email verification.
+
+        :param email: The recipient's email address.
+        :type email: EmailStr
+        :param username: The recipient's username.
+        :type username: str
+        :param host: The host URL for generating email confirmation links.
+        :type host: str
+    """
     try:
         token_verification = auth_service.create_email_token({"sub": email})
         message = MessageSchema(
@@ -39,6 +49,16 @@ async def send_confirm_email(email: EmailStr, username: str, host: str):
 
 
 async def send_reset_email(email: EmailStr, username: str, host: str):
+    """
+        Send a password reset email.
+
+        :param email: The recipient's email address.
+        :type email: EmailStr
+        :param username: The recipient's username.
+        :type username: str
+        :param host: The host URL for generating password reset links.
+        :type host: str
+    """
     try:
         reset_token = auth_service.create_email_token({"sub": email})
         message = MessageSchema(

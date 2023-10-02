@@ -43,13 +43,6 @@ class ContactRequest(BaseModel):
     phone_number: str
     birthday: date
 
-    @field_validator("phone_number")
-    def validate_phone_number(cls, v):
-        if not PhoneNumber.is_valid_phone_number(v):
-            raise HTTPException(status_code=400,
-                                detail="Invalid phone number. The phone number must be in the format +380*******")
-        return v
-
 
 class ContactResponse(BaseModel):
     id: int

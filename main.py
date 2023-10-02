@@ -1,3 +1,11 @@
+"""
+FastAPI Application Configuration
+
+This module configures a FastAPI application with routes, middleware, and event handlers.
+
+Attributes:
+    origins (List[str]): List of allowed origins for CORS.
+"""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
